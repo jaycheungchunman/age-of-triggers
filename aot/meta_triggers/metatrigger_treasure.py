@@ -1,6 +1,11 @@
 from aot import *
+from aot.model.trigger import *
+from aot.model.condition import *
+from aot.model.effect import *
+from aot.meta_triggers.metatrigger import MetaTrigger
 from aot.model.enums.resource import EnumResource
-
+from aot.model.enums.player import PlayerEnum
+from aot.model.enums.unit import UnitConstant, UnitType
 
 class Treasure(MetaTrigger):
     def __init__(self, x, y, unit, amount, resource, players=range(1, 9), create_the_unit=False,
@@ -16,23 +21,23 @@ class Treasure(MetaTrigger):
 
     def setup(self, scenario):
         if self.create_the_unit:
-            scenario.units.new(owner=0, x=self.x, y=self.y, type=self.unit)
+            scenario.units.new(owner=0, x=self.x, y=self.y)
 
         for p in self.players:
             t = Trigger(self.trigger_name+" (P{})".format(p), enable=True)
-            t.if_(ObjectInArea(amount=1,
+            t.if_(ObjectInArea(0,
+                               amount=1,
                                unit_cons=self.unit,
-                               sourcePlayer=0,
                                x1=max(0, self.x - 1), y1=max(0, self.y - 1),
                                x2=min(scenario.map.width, self.x + 1),
                                y2=min(scenario.map.height, self.y + 1)))\
-                .if_(ObjectInArea(amount=1,
-                               sourcePlayer=p,
+                .if_(ObjectInArea(p,
+                               amount=1,
                                x1=max(0, self.x - 1), y1=max(0, self.y - 1),
                                x2=min(scenario.map.width, self.x + 1),
                                y2=min(scenario.map.height, self.y + 1))) \
                 .then_(Tribute(p, self.amount, self.resource, silent=False)) \
-                .then_(SendChat(player=p, text="You found a treasure !")) \
+                .then_(SendChat(player=p, message="You found a treasure !")) \
                 .then_(RemoveObject(player=PlayerEnum.GAIA.value,
                                     unit_cons=self.unit, x1=self.x, x2=self.x, y1=self.y, y2=self.y))
 

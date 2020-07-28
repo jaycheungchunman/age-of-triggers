@@ -1,12 +1,13 @@
 import numpy as np
 
 import logging
-from aot import Scenario
-from aot.metatriggers.metatrigger_treasure import TreasureLoot, TreasureQuarry, TreasureLumber
+from aot.model.scenario import Scenario
+from aot.model.unit import Unit
+from aot.meta_triggers.metatrigger_treasure import TreasureLoot, TreasureQuarry, TreasureLumber
 from aot.utilities.configuration import Configuration
 
 logging.basicConfig(level=logging.DEBUG)
-C = Configuration("configuration_de.json")
+C = Configuration("examples\configuration_de.json")
 scn = Scenario()
 
 for _ in range(100):

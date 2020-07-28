@@ -11,16 +11,17 @@ class Effect(ABC):
                  stringId=-1, time=-1, trigger_to_activate=None,
                  x=-1, y=-1, x1=-1, y1=-1, x2=-1, y2=-1,
                  unit_group=-1, unit_type=-1,
+                 unknown1=-1, unknown4=-1, unknown5=0,
                  panel_location=0, text="", filename="", message="", unit_ids=None, sound_event_name=""):
         if unit_ids is None:
             unit_ids = []
         self.facet = facet
         self.panel_location = 0
         self.sound_event_name = sound_event_name
-        self.unknown1 = -1
+        self.unknown1 = unknown1
         self.unknown3 = bytes([255] * 80)
-        self.unknown4 = -1
-        self.unknown5 = 0
+        self.unknown4 = unknown4
+        self.unknown5 = unknown5
         self.message = message
         self.type = type  # effect type
         self.check = 46  # check
@@ -194,7 +195,10 @@ class DesactivateMetaTrigger:
 class MoveObjectToPoint(Effect):
     def __init__(self, player, unit, x, y):
         super().__init__(type=12, source_player=player, unit_ids=[unit.id], x=x, y=y)
-
+        
+class MoveObjectToPointByConstant(Effect):
+    def __init__(self, player, unit_cons, x1, x2, y1, y2, x, y):
+        super().__init__(type=12, source_player=player, unit_cons=unit_cons, x1=x1, x2=x2, y1=y1, y2=y2, x=x, y=y)
 
 class DamageObject(Effect):
     def __init__(self, player, amount, unit):
@@ -210,10 +214,17 @@ class BuffHPByConstant(Effect):
     def __init__(self, player, amount, unit_cons):
         super().__init__(source_player=player, type=27, amount=amount, unit_cons=unit_cons)
 
+class SetHPByType(Effect):
+    def __init__(self, player, amount, unit_type):
+        super().__init__(source_player=player, type=27, amount=amount, unit_type=unit_type)
 
 class BuffHPByUnit(Effect):
     def __init__(self, player, amount, unit):
         super().__init__(source_player=player, type=27, amount=amount, unit_ids=[unit.id])
+        
+class BuffHPByUnitCons(Effect):
+    def __init__(self, player, unit_cons, x1, x2, y1, y2, x, y, amount):
+        super().__init__(source_player=player, type=27, x1=x1, x2=x2, y1=y1, y2=y2, x=x, y=y, amount=amount)
 
 
 class DesactivateTrigger(Effect):
@@ -257,3 +268,19 @@ class ChangeOwnership(Effect):
 class ChangeOwnershipByUnit(ChangeOwnership):
     def __init__(self, target_player, source_player, unit):
         super().__init__(target_player=target_player, source_player=source_player, unit_ids=[unit.id])
+
+class ModifyAttribute(Effect):
+    def __init__(self, source_player):
+        super().__init__(type=51, source_player=source_player, unit_type=2, unit_cons=276, unit_group=2, amount=4)
+
+class ModifyAttributeCastle(Effect):
+    def __init__(self, source_player):
+        super().__init__(type=51, source_player=source_player, unit_type=1, unit_cons=82, unit_group=2, amount=2)
+        
+class ChangeUnitSpeed(Effect):
+    def __init__(self, player, unit_cons, x1, x2, y1, y2, x, y, amount):
+        super().__init__(type=33, source_player=player, unit_cons=unit_cons, x1=x1, x2=x2, y1=y1, y2=y2, x=x, y=y, amount=amount)
+        
+class ChangeUnitArmor(Effect):
+    def __init__(self, player, unit_cons, x1, x2, y1, y2, x, y, amount):
+        super().__init__(type=31, source_player=player, unit_cons=unit_cons, x1=x1, x2=x2, y1=y1, y2=y2, x=x, y=y, amount=amount)

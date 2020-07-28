@@ -6,8 +6,17 @@ class EnumTile(Enum):
     LEAVES=5
     BLACK_GRASS=41
     PALM_DESERT=13
+    ICE=26
     FOREST=10
     WATER_SHALLOW=1
+    SNOW=33
+    GRASS=0
+    ROAD=24
+    SHALLOWS=4
+    ROCK_ROAD=40
+    ICE_ALLOW_SHIP=35
+    BEACH=2
+    NOBUILDING=2
 
 # TODO
 eTile = {

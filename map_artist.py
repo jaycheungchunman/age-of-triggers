@@ -1,4 +1,5 @@
-from aot import Scenario, Size
+from aot.model.scenario import Scenario
+from aot.model.enums.sizes import Size
 from PIL import Image, ImageChops, ImageOps
 import PIL
 from PIL import ImageFilter
